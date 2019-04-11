@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from userlogin.models import Profile
 from .forms import UserRegisterForm, EditProfileForm, UserProfileForm
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm , PasswordChangeForm
 # Create your views here.
 def index(request):
@@ -50,6 +51,7 @@ def signup(request):
         print(form)
     else:
         form = UserRegisterForm()
+        print(form)
 
     return render(request, "userlogin\signup.html",{'form':form})
 
@@ -61,7 +63,7 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, ('Your profile was successfully updated!'))
-            return redirect('userlogin.login')
+            return redirect('login.login')
         else:
             messages.error(request, ('Please correct the error below.'))
     else:
@@ -71,5 +73,21 @@ def edit_profile(request):
     return render(request, 'userlogin/profile_edit.html', {
         'user_form': user_form,
         'profile_form': profile_form
+    })
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('login.view_profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'userlogin/change_password.html', {
+        'form': form
     })
 

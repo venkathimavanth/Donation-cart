@@ -19,7 +19,8 @@
 
 
             <a href="{% url 'userlogin.edit_profile' %}">Edit Profile</a><br>
-            <a href="#">Change your password here !</a>
+            <a href="{% url 'userlogin.change_password' %}">Change your password here !</a>
+          <a href="{% url 'logout' %}">logout</a>
       </div>
 
 </body>

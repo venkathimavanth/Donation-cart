@@ -19,7 +19,7 @@
                 {{ user_form|crispy}}
                 {{ profile_form|crispy }}
 
-              <a href="#">Change Password Here</a><br>
+              <a href="{% url 'userlogin.change_password' %}">Change Password Here</a><br>
                 <button type="submit">Submit</button>
           </form>
           <br>
