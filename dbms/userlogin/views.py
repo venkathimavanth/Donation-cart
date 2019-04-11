@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from userlogin.models import Profile
+from .forms import UserRegisterForm, EditProfileForm, UserProfileForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm , PasswordChangeForm
 # Create your views here.
 def index(request):
     # Create your views here.
@@ -30,9 +32,11 @@ def signup(request):
             pincode=form.cleaned_data.get('pincode')
             country = form.cleaned_data.get('country')
             picture = form.cleaned_data.get('picture')
+            profile = new_user.profile
 
-            profile = Profile()
-            profile.user=new_user
+
+
+
             profile.phone_number = phone_number
             profile.address = address
             profile.picture = picture
@@ -48,4 +52,24 @@ def signup(request):
         form = UserRegisterForm()
 
     return render(request, "userlogin\signup.html",{'form':form})
+
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = EditProfileForm(request.POST,instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES,instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('userlogin.login')
+        else:
+            messages.error(request, ('Please correct the error below.'))
+    else:
+        user_form = EditProfileForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.profile)
+        print(request.user)
+    return render(request, 'userlogin/profile_edit.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 

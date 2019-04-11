@@ -16,7 +16,7 @@ class Profile(models.Model):
 
 
 
-    picture=models.ImageField(upload_to='profile_image', default='static/login/images/bg_1.jpg')
+    picture=models.ImageField(upload_to='profile_image', default='profile_image/default-img.png')
     phone_number = models.CharField(max_length=10,
                                     validators=[
                                         RegexValidator(

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+<br><br>
+      <h1 class="text-center">Edit Your Profile</h1><br><hr>
+      <div class="container" style="height: 80vh; background-color: white; width: 40%; padding: 20px;">
+          <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                {{ user_form|crispy}}
+                {{ profile_form|crispy }}
+
+              <a href="#">Change Password Here</a><br>
+                <button type="submit">Submit</button>
+          </form>
+          <br>
+      </div>
+
+</body>
+</html>

@@ -27,7 +27,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model=Profile
-        fields=['phone_number','credits' ,'picture','address','city','country','pincode','usertype' ]
+        fields=['phone_number','credits' ,'picture','address','city','country','pincode' ]
 
     def save(self, user=None):
         user_profile=super(UserProfileForm, self).save(commit=False)
@@ -37,3 +37,8 @@ class UserProfileForm(forms.ModelForm):
         return user_profile
 
 
+class EditProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['first_name','last_name', 'email',]

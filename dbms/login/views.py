@@ -9,3 +9,9 @@ def home(request):
 def login(request):
 
     return render(request,"userlogin/accounts.html")
+
+def view_profile(request):
+    args = {'user': request.user}
+    return render(request, 'userlogin/profile.html', args)
+
+
