@@ -5,7 +5,14 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from userlogin.models import Profile
 from .forms import UserRegisterForm, EditProfileForm, UserProfileForm
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm , PasswordChangeForm
 # Create your views here.
 def index(request):
@@ -23,7 +30,7 @@ def signup(request):
             username=form.cleaned_data.get('username')
             raw_password=form.cleaned_data.get('password1')
             new_user = form.save(commit=False)
-            new_user.is_active=True
+            new_user.is_active=False
             new_user.save()
             new_user.refresh_from_db()  # load the profile instance created by the signal
             new_user.save()
@@ -33,21 +40,37 @@ def signup(request):
             pincode=form.cleaned_data.get('pincode')
             country = form.cleaned_data.get('country')
             picture = form.cleaned_data.get('picture')
-            profile = new_user.profile
+            profile=Profile()
+            profile.user = new_user
 
 
 
 
             profile.phone_number = phone_number
             profile.address = address
-            profile.picture = picture
+            if picture:
+                profile.picture = picture
             profile.country = country
             profile.pincode=pincode
             profile.city=city
             profile.save()
 
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your Donatekart account.'
+            message = render_to_string('userlogin/acc_active_email.html', {
+                'user': new_user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(new_user.pk)),
+                'token':account_activation_token.make_token(new_user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return HttpResponse('Please confirm your email address to complete the registration')
 
-            return redirect('login')
+
         print(form)
     else:
         form = UserRegisterForm()
@@ -91,3 +114,19 @@ def change_password(request):
         'form': form
     })
 
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.profile.email_confirmed=True
+        user.save()
+
+        login(request, user)
+        return redirect('login.login')
+        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')

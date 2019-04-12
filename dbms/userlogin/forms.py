@@ -14,7 +14,7 @@ class UserRegisterForm(UserCreationForm):
     country=forms.CharField(min_length=1, max_length=100, required=True, widget=forms.TextInput())
     pincode=forms.CharField(label='zip')
     phone_number=forms.CharField(min_length=10,max_length=10,required=True,widget=forms.TextInput())
-    picture=forms.ImageField( required=False )
+    picture=forms.ImageField( required=False, )
     email = forms.EmailField()
 
     def __init__(self, *args, **kwargs):
