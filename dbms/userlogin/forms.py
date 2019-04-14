@@ -30,11 +30,12 @@ class UserRegisterForm(UserCreationForm):
 
 class UserProfileForm(forms.ModelForm):
 
-    credits=forms.CharField(required=False)
+
 
     class Meta:
         model=Profile
-        fields=['phone_number','credits' ,'picture','address','city','country','pincode' ]
+        fields=['phone_number','picture','address','city','country','pincode' ]
+
 
     def save(self, user=None):
         user_profile=super(UserProfileForm, self).save(commit=False)
@@ -48,4 +49,4 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name','last_name', 'email',]
+        fields = ['first_name','last_name', 'email','username','password']

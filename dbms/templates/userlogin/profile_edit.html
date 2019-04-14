@@ -14,7 +14,7 @@
       <div class="container" style="height: 80vh; background-color: white; width: 40%; padding: 20px;">
           <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form|crispy }}
+
 
                 {{ user_form|crispy}}
                 {{ profile_form|crispy }}
@@ -24,6 +24,10 @@
           </form>
           <br>
       </div>
+
+
+
+
 
 </body>
 </html>

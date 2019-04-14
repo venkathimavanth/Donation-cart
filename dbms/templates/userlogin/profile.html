@@ -1,27 +1,90 @@
 <!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+    .avatar {
+  vertical-align: middle;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+
+  border: 4px solid #fa8f3d;
+}
+
+
+
+</style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
-<body>
+<body style="font-family:Verdana;background-image: url('{% static "userlogin\images\orange-triangle-geometric-pattern_1182-592.jpg" %}')">
 
 
 
-      <div class="container">
+     <div class="container" style="background-color: white;width: 700px;position:relative;margin-top: 50px;margin-bottom: 100px;margin-left: 330px">
+          <div>
+<center>
       <h1>Profile</h1>
-            <p>Username: {{ user }}</p>
-            <p>First Name: {{ user.first_name }}</p>
-            <p>Last Name: {{ user.last_name }}</p>
-            <p>Email: {{ user.email }} </p>
-            <p>Phone Number:{{ user.profile.phone_number }} </p>
-            <p>Picture:<br><img src="{{ user.profile.picture.url }}" width="240px" height="240px"/> </p>
+            <p><br><img src="{{ user.profile.picture.url }}" width="240px" height="240px" class="avatar"/> </p>
+</center>
 
 
-            <a href="{% url 'userlogin.edit_profile' %}">Edit Profile</a><br>
-            <a href="{% url 'userlogin.change_password' %}">Change your password here !</a>
-          <a href="{% url 'logout' %}">logout</a>
+            <h2>&nbsp&nbsppersonal info</h2>
+            <hr>
+
+                <table style="font-size:larger;padding: 20px;width:50%">
+            <tr>
+                <td style="padding:8px;color:#0055b4 ">&nbsp&nbspUsername: </td>
+                <td style="padding:8px">{{ user }}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;color:#0055b4">&nbsp&nbspFirst Name: </td>
+                <td style="padding:8px">{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td style="padding:8px;color:#0055b4">&nbsp&nbspLast Name: </td>
+                <td style="padding:8px">{{ user.last_name }}</td>
+            </tr>
+                </table>
+<br>
+              <div style="text-align-all: left;font-size:larger">
+                  <h2>&nbsp&nbspcontact</h2><hr>
+            <table style="font-size:larger;padding: 20px;width:100%">
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspEmail:</td> <td style="padding:8px">{{ user.email }}</td> </tr>
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspPhone Number:</td><td style="padding:8px">{{ user.profile.phone_number }}</td> </tr>
+
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspAddress:</td><td style="padding:8px">{{ user.profile.address }}</td></tr>
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspcity:</td><td style="padding:8px">{{ user.profile.city }}</td></tr>
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspcountry:</td> <td style="padding:8px">{{ user.profile.country }}</td></tr>
+                <tr><td style="padding:8px;color:#0055b4">&nbsp&nbspzipcode:</td><td style="padding:8px">{{ user.profile.pincode }}</td></tr>
+            </table>
+               </div>
+              <hr>
+              <div style="text-align-all: left;font-size:larger">
+                   <table>
+                      <tr>
+                          <td style="padding:8px;color:#0055b4"><h3>&nbsp&nbspcredits:</h3></td>
+                          <td style="padding:8px;"><h3>{{ user.profile.credits }}</h3></td>
+                      </tr>
+                   </table>
+
+
+
+              </div>
+
+            <hr>
+              <div style="margin: 10px">
+              <button class="btn-btn-primary" style="font-size:15px;  "> <a  href="{% url 'userlogin.edit_profile' %}">Edit Profile</a><br></button>
+
+           <button class="btn-btn-primary" style="font-size:15px;"><a href="{% url 'logout' %}">logout</a></button>
+              </div>
+          </table>
       </div>
+     </div>
 
 </body>
 </html>

@@ -12,6 +12,7 @@ def login(request):
 
 def view_profile(request):
     args = {'user': request.user}
+    print(request.user)
     return render(request, 'userlogin/profile.html', args)
 
 

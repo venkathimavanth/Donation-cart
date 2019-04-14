@@ -80,6 +80,7 @@ def signup(request):
 
 def edit_profile(request):
     if request.method == 'POST':
+        passform = PasswordChangeForm(request.user, request.POST)
         user_form = EditProfileForm(request.POST,instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES,instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
@@ -92,10 +93,16 @@ def edit_profile(request):
     else:
         user_form = EditProfileForm(instance=request.user)
         profile_form = UserProfileForm(instance=request.user.profile)
-        print(request.user)
-    return render(request, 'userlogin/profile_edit.html', {
+        passform = PasswordChangeForm(request.user, request.POST)
+
+
+
+
+    return render(request, 'userlogin/profile_edit2.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'passform':passform,
+        'user':request.user
     })
 
 def change_password(request):
@@ -124,9 +131,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.profile.email_confirmed=True
         user.save()
+        user.profile.save()
 
         login(request, user)
         return redirect('login.login')
-        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+
     else:
         return HttpResponse('Activation link is invalid!')
