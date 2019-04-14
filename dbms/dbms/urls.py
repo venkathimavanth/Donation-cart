@@ -23,6 +23,7 @@ from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView,P
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('', include('login.urls')),
     path('userlogin/', include('userlogin.urls')),
     path('login/',auth_views.LoginView.as_view(template_name='userlogin/index.html'),name='login'),
@@ -38,6 +39,7 @@ urlpatterns = [
     path(r'reset-password/complete/',
         PasswordResetCompleteView.as_view(template_name="userlogin/password_reset_complete.html"),
         name="password_reset_complete"),
+    path('foodtruck/', include('foodtruck.urls')),
 
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

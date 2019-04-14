@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'userlogin.apps.UserloginConfig'
+    'userlogin.apps.UserloginConfig',
+    'foodtruck.apps.FoodtruckConfig'
 
 ]
 
